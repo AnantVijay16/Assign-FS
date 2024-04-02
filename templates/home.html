@@ -6,13 +6,14 @@
     <title>Assign-FS</title>
     <!-- Include Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/static/logo.png">
     <style>
 .button {
   position: relative;
   width: 120px;
   height: 40px;
   background-color: #000;
-  display: flex;
+ 
   align-items: center;
   color: white;
   flex-direction: column;
@@ -97,13 +98,13 @@
         <div class="mt-4 md:mt-0 space-x-6">
             <a href="/login" class="text-black bg-transparent px-4 py-2 md:px-6 md:py-3 rounded hover:bg-white hover:text-blue-500">Login</a>
             <a href="/signup" class="text-black bg-transparent px-4 py-2 md:px-6 md:py-3 rounded hover:bg-white hover:text-blue-500">Signup</a>
-            <button class="button"><a href="/developers">About US</a></button>
+            
         </div>
     </div>
 
     <!-- Body section -->
     <div class="body-content text-center">
-        <h1 class="text-black font-bold text-3xl md:text-4xl mt-8 md:mt-12 mb-6 md:mb-8">Revolutionizing Academic Integrity with Technology</h1>
+        <h1 class="text-black font-bold text-3xl md:text-4xl mt-10 md:mt-14 mb-6 md:mb-8">Revolutionizing Academic Integrity with Technology</h1>
         <p class="text-gray-700 text-lg mb-6 md:mb-8">Welcome to Assign-FS, the innovative platform that transforms the landscape of academic integrity through advanced technology. Our mission is to provide a comprehensive solution for educators and institutions to ensure the authenticity and originality of student assignments.
 
             With Assign-FS, educators can now effortlessly check assignments against plagiarism reports, ensuring fairness and upholding academic standards. Our platform integrates seamlessly with existing academic systems, streamlining the process and saving valuable time for educators.</p>
@@ -155,12 +156,12 @@
                 <button class="bg-yellow-400 px-6 py-2 md:px-8 md:py-3 rounded hover:bg-yellow-500">Read More</button>
             </div>
             <!-- Image -->
-            <div class="md:w-1/2">
+            <div class="md:w-1/2 mb-6">
                 <img src="{{ url_for('static', filename='img2.png') }}" alt="MediConnect Image 2">
             </div>
         </div>
 
-       
+        <button class="button"><a href="/developer">About US</a></button>
         </div>
         
 

@@ -17,50 +17,79 @@ assignments_collection = mongo.db['assignments']
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Replace with your SMTP server address
 app.config['MAIL_PORT'] = 587  # Replace with your SMTP server port (usually 587 for TLS)
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'turnoverr859@gmail.com'  # Replace with your email username
-app.config['MAIL_PASSWORD'] = 'Adarsh123'  # Replace with your email password
+app.config['MAIL_USERNAME'] = 'fittrack2@gmail.com'  # Replace with your email username
+app.config['MAIL_PASSWORD'] = 'ksdvgulnzqkcjpgj'  # Replace with your email password
 mail = Mail(app)
 
 # Generate OTP
 def generate_otp():
     return str(random.randint(1000, 9999))
 
-# Routes for user profiles
-
-# Route for Forgot Password Page
-@app.route('/forgot', methods=['GET', 'POST'])
-def forgot_password():
+# Route for Sign Up Page
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
     if request.method == 'POST':
-        mobile_number = request.form['mobile_number']
-        user = collection.find_one({'mobile_number': mobile_number})
+        name = request.form['name']
+        college_email = request.form['college_email']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        phone = request.form['phone']
 
-        if user:
-            # Generate and store OTP in session
-            otp = generate_otp()
-            session['otp'] = otp
-            session['mobile_number'] = mobile_number
+        # Check if email is already registered
+        existing_user = collection.find_one({'college_email': college_email})
+        if existing_user:
+            return render_template('signup.html', error='Email already exists. Please choose another.')
 
-            # Send OTP to user's email
-            msg = Message('Forgot Password - OTP Verification', sender='your_email@example.com', recipients=[user['college_email']])
-            msg.body = f'Your OTP for password reset is: {otp}'
-            mail.send(msg)
+        # Check if passwords match
+        if password != confirm_password:
+            return render_template('signup.html', error='Passwords do not match. Please try again.')
 
-            # Redirect to OTP verification page
-            return redirect(url_for('verify_otp'))
-        else:
-            # User not found, display error message
-            return render_template('forgot.html', error='User with provided mobile number does not exist.')
+        # Generate OTP
+        otp = generate_otp()
 
-    return render_template('forgot.html')
+        # Send OTP to user's email
+        msg = Message('Signup - OTP Verification', sender='fittrack2@gmail.com', recipients=[college_email])
+        msg.body = f'Your OTP for signup is: {otp}'
+        mail.send(msg)
+
+        # Store OTP in session
+        session['otp'] = otp
+
+        # Store user data in session
+        session['name'] = name
+        session['college_email'] = college_email
+        session['password'] = password
+        session['phone'] = phone
+
+        # Redirect to OTP verification page
+        return redirect(url_for('verify_signup_otp'))
+
+    return render_template('signup.html')
 
 # Route for OTP Verification Page
-@app.route('/verify_otp', methods=['GET', 'POST'])
-def verify_otp():
+@app.route('/verify_signup_otp', methods=['GET', 'POST'])
+def verify_signup_otp():
     if request.method == 'POST':
         user_otp = request.form['otp']
         if 'otp' in session and user_otp == session['otp']:
-            # Correct OTP entered, redirect to reset password page
-            return redirect(url_for('reset_password'))
+            # OTP verification successful, insert user data into the database
+            user_data = {
+                'name': session['name'],
+                'college_email': session['college_email'],
+                'password': session['password'],
+                'phone': session['phone']
+            }
+            collection.insert_one(user_data)
+
+            # Clear session data
+            session.pop('otp')
+            session.pop('name')
+            session.pop('college_email')
+            session.pop('password')
+            session.pop('phone')
+
+            # Redirect to login page after successful sign up
+            return redirect(url_for('login'))
         else:
             # Incorrect OTP entered, display error message
             error_message = "Incorrect OTP. Please try again."
@@ -132,6 +161,11 @@ def profile():
                 return redirect(url_for('profile'))
             return render_template('profile.html', user=user)
     return redirect(url_for('login'))
+
+#Developer Profile
+@app.route('/developer')
+def developer():
+    return render_template('developer.html')
 
 # Routes for assignments
 
