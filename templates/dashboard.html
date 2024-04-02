@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <div class="bg-gray-300 py-8">
+        <div class="container mx-auto px-4">
+            <div class="header flex items-center justify-center mb-8">
+                <div class="logo mr-4">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Assign-FS Logo" width="80" height="80">
+                </div>
+                <div class="title text-3xl font-bold text-gray-800">Assign-FS</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-between items-center p-4 bg-white shadow-md">
+        <h1 class="text-lg font-semibold">Hello {{ name }}</h1>
+        <div class="relative">
+            <button id="profileBtn" class="flex items-center focus:outline-none">
+                <img src="{{ url_for('static', filename='img1.jpg') }}" alt="Profile Image"
+                    class="h-10 w-10 rounded-full">
+            </button>
+            <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden">
+                <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="container mx-auto mt-8">
+        <!-- Your dashboard content here -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const profileBtn = document.getElementById('profileBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+
+            profileBtn.addEventListener('click', function () {
+                profileDropdown.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+
+</html>
